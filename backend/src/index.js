@@ -15,11 +15,6 @@ const PORT = process.env.PORT || 5001;
 
 const __dirname = path.resolve()
 
-app.use((req, res, next) => {
-  console.log('🔍 Incoming Request:', req.method, req.originalUrl);
-  next();
-});
-
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
@@ -27,7 +22,7 @@ app.use(cors({
     credentials: true
 }))
 app.use("/api/auth", authRoutes)
-app.use("/api/messages", messageRoutes)
+// app.use("/api/messages", messageRoutes)
 
 if(process.env.NODE_ENV === 'production'){
     app.use(express.static(path.join(__dirname, "../frontend/dist")));

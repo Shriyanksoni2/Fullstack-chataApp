@@ -8,12 +8,16 @@ import messageRoutes from "./routes/message.route.js"
 import { app, server } from './lib/socket.js';
 import cors from "cors"
 import path from 'path';
+import fallback from 'express-history-api-fallback';
+import { fileURLToPath } from 'url';
+
 
 dotenv.config();
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const PORT = process.env.PORT || 5001;
 
-const __dirname = path.resolve()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(express.json());
 app.use(cookieParser())
@@ -24,12 +28,10 @@ app.use(cors({
 app.use("/api/auth", authRoutes)
 app.use("/api/messages", messageRoutes)
 
-if (process.env.NODE_ENV === 'production') {
-  const root = path.join(__dirname, '../frontend/dist');
-  const fallback = require('express-history-api-fallback');
-
-  app.use(express.static(root));
-  app.use(fallback('index.html', { root }));
+if (process.env.NODE_ENV === "production") {
+  const staticPath = path.resolve(__dirname, "../frontend/dist");
+  app.use(express.static(staticPath));
+  app.use(fallback('index.html', { root: staticPath }));
 }
 
 server.listen(5001, () => {

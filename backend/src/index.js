@@ -24,12 +24,12 @@ app.use(cors({
 app.use("/api/auth", authRoutes)
 app.use("/api/messages", messageRoutes)
 
-if(process.env.NODE_ENV === 'production'){
-    app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+if (process.env.NODE_ENV === 'production') {
+  const root = path.join(__dirname, '../frontend/dist');
+  const fallback = require('express-history-api-fallback');
 
-    app.get("/*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../../frontend", "dist", "index.html"));
-    }); 
+  app.use(express.static(root));
+  app.use(fallback('index.html', { root }));
 }
 
 server.listen(5001, () => {

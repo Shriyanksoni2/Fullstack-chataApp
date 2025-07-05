@@ -20,7 +20,9 @@ const ChatContainer = () => {
   const messageEndRef = useRef(null);
 
   useEffect(() => {
+    console.log('getmessage called ')
     getMessages(selectedUser._id);
+    console.log(messages)
 
     subscribeToMessages();
 
